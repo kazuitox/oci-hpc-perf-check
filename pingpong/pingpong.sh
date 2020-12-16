@@ -1,9 +1,8 @@
 #!/bin/sh
+source /etc/opt/oci-hpc/bashrc/.bashrc_openmpi3
 LIST=/etc/opt/oci-hpc/hostfile.rdma
 
 MAIN_NODE=`head -1 ${LIST}`
-source /etc/opt/oci-hpc/bashrc/.bashrc_openmpi3
-sed '1d' /etc/opt/oci-hpc/hostfile.rdma > ./rdma-hostfile
 
 for line in `cat ${LIST} | sed '1d'`
 do
