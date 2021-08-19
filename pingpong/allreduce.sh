@@ -1,5 +1,5 @@
 #!/bin/sh
-OMPI="openmpi-4.0.3rc4"
+OMPI=`find /usr -name mpirun 2>/dev/null | awk -F\/ '{print $5}'`
 export PATH=/usr/mpi/gcc/${OMPI}/bin:$PATH
 export LD_LIBRARY_PATH=/usr/mpi/gcc/${OMPI}/lib:$LD_LIBRARY_PATH
 LIST=./hosts
