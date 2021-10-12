@@ -1,4 +1,6 @@
 #!/bin/sh
+NPROCS=$1
+
 cd ${0%/*} || exit 1    # run from this directory
 
 # Source tutorial run functions
@@ -8,6 +10,6 @@ cd ${0%/*} || exit 1    # run from this directory
 #
 #           mpirun -np $NPROCS simpleFoam -parallel
 #
-runParallel simpleFoam $1
+runParallel simpleFoam $NPROCS
 
 # ----------------------------------------------------------------- end-of-file
