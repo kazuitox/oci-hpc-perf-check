@@ -7,12 +7,14 @@ mkdir -p $DIR/mesh
 ./Mesh 130 52 52
 mv log.* $DIR/mesh
 echo "`date`: Finished mesh"
+echo
 
 echo "`date`: Start setup"
 mkdir -p $DIR/setup
 ./Setup 72
 mv log.* $DIR/setup
 echo "`date`: Finished setup"
+echo
 
 echo "`date`: Start solv"
 mkdir -p $DIR/solve
