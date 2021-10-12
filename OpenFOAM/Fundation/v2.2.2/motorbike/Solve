@@ -8,6 +8,6 @@ cd ${0%/*} || exit 1    # run from this directory
 #
 #           mpirun -np $NPROCS simpleFoam -parallel
 #
-runParallel simpleFoam 1076
+runParallel simpleFoam $1
 
 # ----------------------------------------------------------------- end-of-file
