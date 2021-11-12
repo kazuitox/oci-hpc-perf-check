@@ -3,7 +3,7 @@
 OMPI_VER=4.0.3rc4
 export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-${OMPI_VER}/lib:$LD_LIBRARY_PATH
 
-/bin/rm ./node-*.txt
+/bin/rm ./node-*.txt ./*.log
 
 cat /etc/hosts | grep rdma  | awk '{print $2}' > hosts
 LIST=./hosts
