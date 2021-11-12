@@ -35,5 +35,6 @@ do
  echo "$RES" >> ${FROM}.txt
 
 done
-
+echo
+echo "=== MAP =============================="
 paste node-*.txt
