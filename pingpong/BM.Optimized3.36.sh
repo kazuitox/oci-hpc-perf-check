@@ -3,6 +3,8 @@
 OMPI_VER=4.0.3rc4
 export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-${OMPI_VER}/lib:$LD_LIBRARY_PATH
 
+/bin/rm ./node-*.txt
+
 cat /etc/hosts | grep rdma  | awk '{print $2}' > hosts
 LIST=./hosts
 
@@ -21,3 +23,17 @@ do
  done
 
 done
+
+for file in `ls *.log`
+do
+
+ FROM=`echo ${file} | cut -d \- -f 2-3`
+ TO=`echo ${file} | cut -d \- -f 6-7`
+
+ RES=`grep "            1" ${file} | awk '{print $3}'`
+
+ echo "$RES" >> ${FROM}.txt
+
+done
+
+paste node-*.txt
