@@ -24,12 +24,23 @@ do
 
 done
 
+echo "" > node-0.txt
+for file in `ls *.log | cut -d \- -f 1-3 | sort -u`
+do
+ FROM=`echo ${file} | cut -d \- -f 2-3`
+ echo "$FROM" >> node-0.txt
+done
+
+for file in `ls *.log`
+do
+ FROM=`echo ${file} | cut -d \- -f 2-3`
+ echo "$FROM" > ${FROM}.txt
+done
+
 for file in `ls *.log`
 do
 
  FROM=`echo ${file} | cut -d \- -f 2-3`
- TO=`echo ${file} | cut -d \- -f 6-7`
-
  RES=`grep "            1" ${file} | awk '{print $3}'`
 
  echo "$RES" >> ${FROM}.txt
