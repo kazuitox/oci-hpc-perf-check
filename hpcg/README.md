@@ -83,4 +83,6 @@ hpc-node-16-rdma.local.rdma_HPCG-Benchmark_3.1_2020-12-16_11-43-14.txt:Final Sum
 [opc@hpc-node-01 OCI_HPC2_Perf_Check]$
 ```
 
-22 GFLOP/s 前後出ていればノードの計算能力は問題ないと言えます。
+以下の数値前後出ていればノードの計算能力としては問題ないと思います。
+- BM.HPC2.36 で 22 GFLOP/s
+- BM.Optimized3.36 で 32 GFLOP/s
