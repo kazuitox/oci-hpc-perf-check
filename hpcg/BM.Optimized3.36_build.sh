@@ -1,7 +1,7 @@
 #!/bin/sh
 hostfile_org=/etc/opt/oci-hpc/hostfile.rdma
 hostfile=/var/tmp/hostlist.rdma.openmpi
-source /usr/mpi/gcc/openmpi-4.1.0rc5/bin/mpivars.sh
+source /usr/mpi/gcc/openmpi-4.0.3rc4/bin/mpivars.sh
 line=`wc -l ${hostfile_org} | awk '{print $1}'`
 np=`expr 36 \* ${line}`
 
