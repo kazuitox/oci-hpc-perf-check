@@ -1,0 +1,60 @@
+#!/bin/sh
+#SBATCH -J pingpong-map
+#SBATCH -o pingpong-map.o%J
+#SBATCH -e pingpong-map.e%J
+#SBATCH --ntasks=432
+
+cd ${SLURM_SUBMIT_DIR}
+OMPI=`find /usr -name mpirun 2>/dev/null | awk -F\/ '{print $5}'`
+source /usr/mpi/gcc/${OMPI}/bin/mpivars.sh
+
+/bin/rm ./*.txt ./*.log
+
+scontrol show hostname $SLURM_JOB_NODELIST > ./hosts
+LIST=./hosts
+
+for MAIN_NODE in `cat ${LIST}`
+do
+
+ for line in `cat ${LIST}`
+ do
+  if [ ${MAIN_NODE} = ${line} ]; then
+   echo skip
+   echo "            1          NA     NA         NA" | tee ${MAIN_NODE}_${line}.log
+  else
+   echo "${MAIN_NODE} slots=1" > hostfile
+   echo "rank 0=${MAIN_NODE} slots=0:0" > rankfile
+   echo "${line} slots=1" >> hostfile
+   echo "rank 1=${line} slots=0:0" >> rankfile
+   /usr/mpi/gcc/${OMPI}/bin/mpirun --display-map -hostfile ./hostfile -rankfile ./rankfile -mca pml ucx -x UCX_NET_DEVICES=mlx5_2:1 -x UCX_IB_TRAFFIC_CLASS=105 -x UCX_IB_GID_INDEX=3 -x HCOLL_ENABLE_MCAST_ALL=0 -mca coll_hcoll_enable 0 -np 2 /usr/mpi/gcc/${OMPI}/tests/imb/IMB-MPI1 pingpong | tee ${MAIN_NODE}_${line}.log
+  fi
+ done
+
+done
+
+echo "" > column.txt
+for file in `ls -1 *.log | cut -d \_ -f 1 | sort -u`
+do
+ FROM=`echo ${file} | cut -d \_ -f 2 | sed 's/.log//'`
+ echo "$FROM" >> column.txt
+done
+
+for file in `ls -1 *.log | sort`
+do
+ FROM=`echo ${file} | cut -d \_ -f 1`
+ echo "$FROM" > ${FROM}.txt
+done
+
+for file in `ls -1 *.log | sort`
+do
+
+ #FROM=`echo ${file} | cut -d \_ -f 2 | sed 's/.log//'`
+ FROM=`echo ${file} | cut -d \_ -f 1 | sed 's/.log//'`
+ RES=`grep "            1" ${file} | awk '{print $3}'`
+
+ echo "$RES" >> ${FROM}.txt
+
+done
+echo
+echo "=== MAP =============================="
+paste -d, column.txt inst-*.txt > pingpong-map.csv
