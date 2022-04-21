@@ -2,7 +2,7 @@
 #SBATCH -J pingpong-map
 #SBATCH -o pingpong-map.o%J
 #SBATCH -e pingpong-map.e%J
-#SBATCH --ntasks=432
+#SBATCH --ntasks=1152
 
 cd ${SLURM_SUBMIT_DIR}
 OMPI=`find /usr -name mpirun 2>/dev/null | awk -F\/ '{print $5}'`
@@ -21,6 +21,7 @@ do
   if [ ${MAIN_NODE} = ${line} ]; then
    echo skip
    echo "            1          NA     NA         NA" | tee ${MAIN_NODE}_${line}.log
+   echo "      4194304          NA     NA         NA" | tee -a ${MAIN_NODE}_${line}.log
   else
    echo "${MAIN_NODE} slots=1" > hostfile
    echo "rank 0=${MAIN_NODE} slots=0:0" > rankfile
@@ -42,19 +43,22 @@ done
 for file in `ls -1 *.log | sort`
 do
  FROM=`echo ${file} | cut -d \_ -f 1`
- echo "$FROM" > ${FROM}.txt
+ echo "$FROM" > ${FROM}_lat.txt
+ echo "$FROM" > ${FROM}_tp.txt
 done
 
 for file in `ls -1 *.log | sort`
 do
 
- #FROM=`echo ${file} | cut -d \_ -f 2 | sed 's/.log//'`
  FROM=`echo ${file} | cut -d \_ -f 1 | sed 's/.log//'`
- RES=`grep "            1" ${file} | awk '{print $3}'`
+ RES_LAT=`grep "            1" ${file} | awk '{print $3}'`
+ RES_TP=`grep "      4194304" ${file} | awk '{print $4}'`
 
- echo "$RES" >> ${FROM}.txt
+ echo "$RES_LAT" >> ${FROM}_lat.txt
+ echo "$RES_TP" >> ${FROM}_tp.txt
 
 done
 echo
 echo "=== MAP =============================="
-paste -d, column.txt inst-*.txt > pingpong-map.csv
+paste -d, column.txt inst-*_lat.txt > pingpong-lat-map.csv
+paste -d, column.txt inst-*_tp.txt > pingpong-tp-map.csv
