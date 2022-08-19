@@ -60,5 +60,5 @@ do
 done
 echo
 echo "=== MAP =============================="
-paste -d, column.txt inst-*_lat.txt > pingpong-lat-map.csv
-paste -d, column.txt inst-*_tp.txt > pingpong-tp-map.csv
+paste -d, column.txt *_lat.txt > pingpong-lat-map.csv
+paste -d, column.txt *_tp.txt > pingpong-tp-map.csv
