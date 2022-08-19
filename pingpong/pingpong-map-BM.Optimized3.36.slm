@@ -1,4 +1,5 @@
 #!/bin/sh
+#SBATCH -p partition-name
 #SBATCH -J pingpong-map
 #SBATCH -o pingpong-map.o%J
 #SBATCH -e pingpong-map.e%J
